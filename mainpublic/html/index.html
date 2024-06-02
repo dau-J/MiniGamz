@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>2024 S/W 팀 프로젝트</title>
+    <link rel="stylesheet" href="/css/styles.css">
+    <link rel="stylesheet" href="/css/minions.css">
+    <style>
+        /* 추가적인 CSS 스타일링 */
+    </style>
+</head>
+<body>
+    <header>
+        <nav>
+            <div class="logo">
+                <h2>Mini Gemz</h2>
+            </div>
+            <div class="menu">
+                <ul>
+                    <li><a href="#community">커뮤니티</a></li>
+                    <li><a href="#inquiry">문의 게시판</a></li>
+                    <li><a href="#" id="profileLink">프로필</a></li>
+                </ul>
+            </div>
+            <div class="auth">
+                <ul id="authMenu">
+                    <li><a href="login.html" id="loginLink">로그인</a></li>
+                    <li><a href="signup.html" id="signupLink">회원가입</a></li>
+                </ul>
+            </div>
+        </nav>
+        <div class="minion-header">
+            <img src="/images/minion_header.png" alt="Minion Header Image">
+        </div>
+    </header>
+    
+    <main>
+        <section class="games-section">
+            <h2>인기 게임</h2>
+            <div class="games-grid">
+                <div class="game">
+                    <a href="baseball.html">
+                     <img src="/images/baseball.png" alt="숫자야구">
+                    </a> 
+                    <a href="baseball.html">
+                     <h3>숫자야구</h3>
+                    </a> 
+                </div>
+                <div class="games-grid">
+                    <div class="game">
+                        <a href="minionbird.html">
+                         <img src="/images/minionbird.png" alt="미니언 버드">
+                        </a> 
+                        <a href="minionbird.html">
+                         <h3>미니언 버드</h3>
+                        </a> 
+                    </div>
+                <div class="game">
+                    <img src="/images/ex1.png" alt="슈의 라면가게">
+                    <h3>슈의 라면가게</h3>
+                </div>
+                <div class="game">
+                    <img src="/images/ex1.png" alt="버블 슈터 (Bubble Shooter)">
+                    <h3>버블 슈터</h3>
+                </div>
+                <div class="game">
+                    <img src="/images/ex1.png" alt="파니팡 파니하우스 풀버전">
+                    <h3>파니팡 파니하우스 풀버전</h3>
+                </div>
+                <div class="game">
+                    <img src="/images/ex1.png" alt="동물구출 대작전">
+                    <h3>동물구출 대작전</h3>
+                </div>
+                <div class="game">
+                    <img src="/images/ex1.png" alt="백중탈출2 리메이크">
+                    <h3>백중탈출2 리메이크</h3>
+                </div>
+                <div class="game">
+                    <img src="/images/ex1.png" alt="아이탈출1 - 탈출게임">
+                    <h3>아이탈출1 - 탈출게임</h3>
+                </div>
+                <div class="game">
+                    <img src="/images/ex1.png" alt="사쿠란보 DDR">
+                    <h3>사쿠란보 DDR</h3>
+                </div>
+                <div class="game">
+                    <img src="/images/ex1.png" alt="죽림고수">
+                    <h3>죽림고수</h3>
+                </div>
+                <div class="game">
+                    <img src="/images/ex1.png" alt="버터플라이">
+                    <h3>버터플라이</h3>
+                </div>
+                <div class="game">
+                    <img src="/images/ex1.png" alt="펭귄콩콩">
+                    <h3>펭귄콩콩 - 야후꾸러기 마법학교 미니게임</h3>
+                </div>
+            </div>
+        </section>
+        <section id="community">
+            <h2>커뮤니티</h2>
+            <div class="post">
+                <h3>게시물 제목</h3>
+                <p>내용</p>
+            </div>
+            <div class="post">
+                <h3>게시물 제목</h3>
+                <p>내용</p>
+            </div>
+        </section>
+        <section id="inquiry">
+            <h2>문의 게시판</h2>
+            <form id="inquiry-form">
+                <label for="name">이름:</label>
+                <input type="text" id="name" name="name" required>
+                <label for="email">이메일:</label>
+                <input type="email" id="email" name="email" required>
+                <label for="message">문의 내용:</label>
+                <textarea id="message" name="message" rows="4" required></textarea>
+                <button type="submit">제출</button>
+            </form>
+        </section>
+        <div id="toggle-chat" class="chat-container">
+            <section id="chat">
+                <h2>라이브 채팅</h2>
+                <ul id="messages"></ul>
+                <form id="chat-form">
+                    <input id="username" type="text" placeholder="유저명" required>
+                    <input id="chat-message" type="text" placeholder="메시지 입력" required>
+                    <button type="submit">전송</button>
+                </form>
+            </section>
+        </div>
+    <script src="/socket.io/socket.io.js"></script>
+    <button id="toggle-chat-btn" data-open-text="라이브 채팅 열기">닫기</button>
+    <script>
+        function checkLoginStatus() {
+            fetch('/api/profile')
+                .then(response => {
+                    if (response.ok) {
+                        document.getElementById('authMenu').innerHTML = `
+                            <li><a href="#" id="logoutLink">로그아웃</a></li>
+                        `;
+                        document.getElementById('logoutLink').addEventListener('click', logout);
+                    } else {
+                        document.getElementById('authMenu').innerHTML = `
+                            <li><a href="login.html" id="loginLink">로그인</a></li>
+                            <li><a href="signup.html" id="signupLink">회원가입</a></li>
+                        `;
+                    }
+                })
+                .catch(error => {
+                    console.error('Error checking login status:', error);
+                });
+        }
+
+        function logout() {
+            fetch('/logout', { method: 'POST' })
+                .then(response => {
+                    if (response.ok) {
+                        window.location.href = '/';
+                    } else {
+                        console.error('Logout failed');
+                    }
+                })
+                .catch(error => {
+                    console.error('Error logging out:', error);
+                });
+        }
+
+        function redirectToProfile() {
+            fetch('/api/profile')
+                .then(response => {
+                    if (response.ok) {
+                        window.location.href = 'profile.html';
+                    } else {
+                        window.location.href = 'login.html';
+                    }
+                })
+                .catch(error => {
+                    console.error('Error checking profile:', error);
+                    window.location.href = 'login.html';
+                });
+        }
+
+        document.addEventListener('DOMContentLoaded', function() {
+            checkLoginStatus();
+            document.getElementById('profileLink').addEventListener('click', redirectToProfile);
+        });
+    </script>
+    <script src="/js/scripts.js"></script>
+</body>
+</html>
